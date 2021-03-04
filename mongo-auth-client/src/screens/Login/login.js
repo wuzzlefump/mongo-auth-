@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useContext} from 'react'
 import './style.css'
+import * as api from "../../utils/api";
+import { useHistory } from "react-router-dom";
 
 const Login = (props)=>{
 
@@ -30,13 +32,47 @@ const Login = (props)=>{
         password:loginPass
       }
       console.log(request)
+
+      api
+      .post({ route: "/login", body: request })
+      .then((res) => {
+        console.log(res);
+        // setUser(res.user);
+        // setToken(res.token);
+        // setIsAuthenticated(true);
+        // setEmail("");
+        // setPassword("");
+
+        // let redirect = new URLSearchParams(window.location.search).get("to");
+        // redirect = redirect ? redirect : "/home";
+
+        // history.push(redirect);
+      })
+      .catch((err) => {
+        console.log("There was a login error");
+        console.log(err);
+        // setEmail("");
+        // setPassword("");
+      });
     }
+
+    
     const handleSignup = (e)=>{
       e.preventDefault()
       let request = {
         email:signUpEmail,
         password:signUpPass
       }
+      api.post({route: "/signup", body: request})
+      .then((res) =>{
+        console.log(res)
+      })
+      .catch((err) =>{
+        console.log("There was a signup error");
+        console.log(err);
+        
+      })
+     
       console.log(request)
     }
 
