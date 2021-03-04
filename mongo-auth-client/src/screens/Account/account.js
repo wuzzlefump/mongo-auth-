@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Account = ()=>{
+const Account = (props)=>{
 
 
     return(<h1></h1>)
