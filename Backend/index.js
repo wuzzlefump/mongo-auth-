@@ -1,3 +1,4 @@
+//---------------------------- require statements--------------------
 const express = require("express");
 const morgan = require("morgan")
 const cors = require("cors")
@@ -10,20 +11,37 @@ var sha256 = require('js-sha256');
 //----------------------- import mongoose models--------------------
 const db = require("./models")
 
-//---------------------------- require statements--------------------
+//-------server config-----------------------------------------------
 const PORT = 8080;
 const app = express()
 
 app.use(morgan("tiny"));
 app.use(bodyParser.json());
 app.use(cors());
+
+const { hydrateUser } = require("./lib/hydrators/user");
+const { createUserToken } = require("./lib/jwtTokens");
 //----------------------------Routing / route statements-------------
 //login
 app.post("/login", async (req,res)=>{
   const {email, password}= req.body
 
-  res.json({ping:req.body})
+  // check to see if credential match
+  db.User.findOne({email:email, password:sha256(password)}, (error, user)=>{
+    if(!user){
+      return res.status(401).json({ status: "Unauthorized" })
+    }
+    if(user){
+      const authUser =  hydrateUser(user) 
+      console.log(authUser)
+      const {token, tokenExpires } = createUserToken({userInfo:{ uuid:authUser.uuid, email:authUser.email}})
+
+    return  res.json({authUser,token,tokenExpires})
+    }
+
+  })
 })
+
 //signup
 app.post("/signup", async (req,res)=>{
   const {email, password}= req.body
