@@ -4,6 +4,7 @@ import './App.css';
 import Login from './screens/Login/login'
 import Account from './screens/Account/account'
 import PrivateRoute from "./componenets/private-route/privateRoute"
+import Home from "./screens/Home/home"
 
 import Layout from "./componenets/Layout/layout"
 import AuthContextProvider from "./context/authContext";
@@ -24,6 +25,11 @@ function App() {
                 </Layout>
               </PrivateRoute>
               <PrivateRoute path="/home" exact>
+                <Layout>
+                  <Home />
+                </Layout>
+              </PrivateRoute>
+              <PrivateRoute path="/account" exact>
                 <Layout>
                   <Account />
                 </Layout>
