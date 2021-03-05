@@ -1,9 +1,12 @@
 import React from "react"
 import "./style.css"
+import Navbar from "../navbar/navbar"
 
 const Layout = (props)=>{
-    <div>
+  return (<div>
     <Navbar />
     <main>{props.children}</main>
-  </div>
+  </div>)
+   
 }
+export default Layout;

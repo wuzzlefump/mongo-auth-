@@ -2,9 +2,14 @@ import React, {useState, useContext} from 'react'
 import './style.css'
 import * as api from "../../utils/api";
 import { useHistory } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
+import { UserContext } from "../../context/userContext";
 
 const Login = (props)=>{
-
+  //context
+  const { setUser } = useContext(UserContext);
+  const { setIsAuthenticated, setToken } = useContext(AuthContext);
+  const history = useHistory();
   //toggle between signup and login
     const [loginState, setLoginState]=useState(true)
       const toggleLogin = ()=>{
@@ -16,12 +21,12 @@ const Login = (props)=>{
     }
     //toggle
     //signup states
-    const [signUpEmail, setSignUpEmail]=useState()
-    const [signUpPass, setSignUpPass]=useState()
+    const [signUpEmail, setSignUpEmail]=useState("")
+    const [signUpPass, setSignUpPass]=useState("")
     //signup States
     // Login States
-    const [loginEmail, setLoginEmail]=useState()
-    const [loginPass, setLoginPass]=useState()
+    const [loginEmail, setLoginEmail]=useState("")
+    const [loginPass, setLoginPass]=useState("")
     // Login States
 
     //handleLogin
@@ -37,22 +42,22 @@ const Login = (props)=>{
       .post({ route: "/login", body: request })
       .then((res) => {
         console.log(res);
-        // setUser(res.user);
-        // setToken(res.token);
-        // setIsAuthenticated(true);
-        // setEmail("");
-        // setPassword("");
+        setUser(res.authUser);
+        setToken(res.token);
+        setIsAuthenticated(true);
+        setLoginEmail("");
+        setLoginPass("");
 
-        // let redirect = new URLSearchParams(window.location.search).get("to");
-        // redirect = redirect ? redirect : "/home";
+        let redirect = new URLSearchParams(window.location.search).get("to");
+        redirect = redirect ? redirect : "/home";
 
-        // history.push(redirect);
+        history.push(redirect);
       })
       .catch((err) => {
         console.log("There was a login error");
         console.log(err);
-        // setEmail("");
-        // setPassword("");
+        setLoginEmail("");
+        setLoginPass("");
       });
     }
 
